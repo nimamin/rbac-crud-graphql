@@ -35,8 +35,8 @@ type Mutation {
   createRole(name: String!): Role!
   updateRole(name: String!, id: Int!): Role!
   removeRole(id: Int!): Role!
-  createPermission(createPermissionInput: CreatePermissionInput!): Permission!
-  updatePermission(updatePermissionInput: UpdatePermissionInput!): Permission!
+  createPermission(name: String!): Permission!
+  updatePermission(name: String!, id: Int!): Permission!
   removePermission(id: Int!): Permission!
 }
 
@@ -48,14 +48,4 @@ input CreateUserInput {
 input UpdateUserInput {
   id: Int!
   username: String!
-}
-
-input CreatePermissionInput {
-  id: Int!
-  name: String!
-}
-
-input UpdatePermissionInput {
-  id: Int!
-  name: String!
 }
