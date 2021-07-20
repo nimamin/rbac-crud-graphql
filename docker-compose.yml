@@ -1,0 +1,55 @@
+version: '3.7'
+
+services:
+  main:
+    container_name: main
+    build:
+      context: ./rbac
+      target: development
+    volumes:
+      - ./rbac:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+      - 9229:9229
+    command: npm run start:dev
+    env_file:
+      - ./rbac/.env
+    networks:
+      - webnet
+  
+  # redis:
+  #   container_name: redis
+  #   image: redis:5
+  #   networks:
+  #     - webnet
+
+  postgres:
+    container_name: postgres
+    image: postgres:12
+    networks:
+      - webnet
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: dev
+      POSTGRES_DB: rbac
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - webnet
+
+networks:
+  webnet:
+
+volumes:
+  pgdata:
