@@ -27,8 +27,12 @@ export class RolesService {
     return this.roleRepository.find();
   }
 
-  findOne(id: number) {
-    return this.roleRepository.findOne({ id });
+  async findOne(id: number) {
+    let role = await this.roleRepository.findOne({ id });
+    if (!role) {
+      throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
+    }
+    return role;
   }
 
   async update(id: number, name: string) {
