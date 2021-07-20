@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreatePermissionInput } from './dto/create-permission.input';
 import { UpdatePermissionInput } from './dto/update-permission.input';
@@ -10,6 +11,8 @@ export class PermissionsService {
   constructor(
     @InjectRepository(Permission)
     private permissionRepository: Repository<Permission>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
   async create(name: string) {
     let per = await this.permissionRepository.findOne({ name });
@@ -50,5 +53,10 @@ export class PermissionsService {
       throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
     }
     return await this.permissionRepository.remove(permission);
+  }
+
+  async getUserPermissions(userId: number) {
+    let user = await this.userRepository.findOne({ where: { id: userId }, relations: ['permissions'] });
+    return user.permissions;
   }
 }

@@ -1,26 +1,54 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  create(createUserInput: CreateUserInput) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+  ) {}
+
+  async create(username: string) {
+    let user = await this.userRepository.findOne({ username });
+
+    if (!user) {
+      user = new User();
+      user.username = username;
+      user = await this.userRepository.save(user);
+    }
+
+    return user;
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.userRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    let user = await this.userRepository.findOne({ id });
+    if (!user) {
+      throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
+    }
+    return user;
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+  async update(id: number, username: string) {
+    let user = await this.userRepository.findOne({ id });
+    if (!user) {
+      throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
+    }
+    user.username = username;
+    return this.userRepository.save(user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    let user = await this.userRepository.findOne({ id });
+    if (!user) {
+      throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
+    }
+    return await this.userRepository.remove(user);
   }
 }
