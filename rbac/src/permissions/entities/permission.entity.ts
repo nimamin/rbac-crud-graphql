@@ -1,8 +1,8 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { ObjectType, Field, Int } from '@nestjs/graphql';
 
 @ObjectType()
 export class Permission {
-  @Field((type) => Int)
+  @Field(() => Int)
   id: number;
 
   @Field()

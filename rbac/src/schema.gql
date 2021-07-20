@@ -15,11 +15,57 @@ type Role {
 type User {
   id: Int!
   username: String!
-  role: [Role!]
-  permissions: [Permission]
+  role: Role!
+  permissions: [Permission!]!
 }
 
 type Query {
-  user(id: Int!): User!
   users: [User!]!
+  user(id: Int!): User!
+  roles: [Role!]!
+  role(id: Int!): Role!
+  permissions: [Permission!]!
+  permission(id: Int!): Permission!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+  createRole(createRoleInput: CreateRoleInput!): Role!
+  updateRole(updateRoleInput: UpdateRoleInput!): Role!
+  removeRole(id: Int!): Role!
+  createPermission(createPermissionInput: CreatePermissionInput!): Permission!
+  updatePermission(updatePermissionInput: UpdatePermissionInput!): Permission!
+  removePermission(id: Int!): Permission!
+}
+
+input CreateUserInput {
+  id: Int!
+  username: String!
+}
+
+input UpdateUserInput {
+  id: Int!
+  username: String!
+}
+
+input CreateRoleInput {
+  id: Int!
+  name: String!
+}
+
+input UpdateRoleInput {
+  id: Int!
+  name: String!
+}
+
+input CreatePermissionInput {
+  id: Int!
+  name: String!
+}
+
+input UpdatePermissionInput {
+  id: Int!
+  name: String!
 }
