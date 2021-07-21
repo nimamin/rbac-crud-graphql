@@ -67,11 +67,4 @@ export class PermissionsService {
     return await this.permissionRepository.remove(permission);
   }
 
-  async getUserPermissions(userId: number) {
-    let user = await this.userRepository.findOne({
-      where: { id: userId },
-      relations: ['permissions'],
-    });
-    return user.permissions;
-  }
 }

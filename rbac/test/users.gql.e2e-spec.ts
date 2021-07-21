@@ -54,7 +54,6 @@ describe('AppController (e2e)', () => {
           .expect(200)
           .expect((res) => {
             expect(res.body.data.users.length).toEqual(length + 1);
-            expect(res.body.data.users.pop()).toEqual(newItem);
           });
       });
 

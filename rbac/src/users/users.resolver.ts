@@ -54,6 +54,6 @@ export class UsersResolver {
 
   @ResolveField()
   async permissions(@Parent() user: User) {
-    return this.permissionService.getUserPermissions(user.id);
+    return this.usersService.getUserPermissions(user.id);
   }
 }
