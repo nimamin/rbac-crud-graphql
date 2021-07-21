@@ -27,7 +27,7 @@ describe('AppController (e2e)', () => {
     };
 
     describe('roles', () => {
-      let newRole, length;
+      let newItem, length;
       it('should get all roles array', () => {
         return post('{roles {id name}}')
           .expect(200)
@@ -38,12 +38,14 @@ describe('AppController (e2e)', () => {
       });
 
       it('should create a new role', () => {
-        return post('mutation {createRole(name: "justfortest") {id, name}}')
+        return post(
+          'mutation {createRole(createRoleInput: { name: "justfortest" }) {id, name}}',
+        )
           .expect(200)
           .expect((res) => {
             expect(res.body.data.createRole.name).toEqual('justfortest');
             expect(res.body.data.createRole.id).toBeDefined();
-            newRole = res.body.data.createRole;
+            newItem = res.body.data.createRole;
           });
       });
 
@@ -52,48 +54,48 @@ describe('AppController (e2e)', () => {
           .expect(200)
           .expect((res) => {
             expect(res.body.data.roles.length).toEqual(length + 1);
-            expect(res.body.data.roles.pop()).toEqual(newRole);
+            expect(res.body.data.roles.pop()).toEqual(newItem);
           });
       });
 
       it('should get a single role', () => {
-        return post(`{role(id: ${newRole.id}) {id name}}`)
+        return post(`{role(id: ${newItem.id}) {id name}}`)
           .expect(200)
           .expect((res) => {
-            expect(res.body.data.role).toEqual(newRole);
+            expect(res.body.data.role).toEqual(newItem);
           });
       });
 
       it('should update the new role', () => {
         return post(
-          `mutation {updateRole(id: ${newRole.id}, name: "justfortestedited") {id, name}}`,
+          `mutation {updateRole(updateRoleInput: {id: ${newItem.id}, name: "justfortestedited"}) {id, name}}`,
         )
           .expect(200)
           .expect((res) => {
             expect(res.body.data.updateRole.name).toEqual('justfortestedited');
             expect(res.body.data.updateRole.id).toBeDefined();
-            newRole = res.body.data.updateRole;
+            newItem = res.body.data.updateRole;
           });
       });
 
       it('should get the updated role', () => {
-        return post(`{role(id: ${newRole.id}) {id name}}`)
+        return post(`{role(id: ${newItem.id}) {id name}}`)
           .expect(200)
           .expect((res) => {
-            expect(res.body.data.role).toEqual(newRole);
+            expect(res.body.data.role).toEqual(newItem);
           });
       });
 
       it('should remove the new role', () => {
-        return post(`mutation {removeRole(id: ${newRole.id}) {name}}`)
+        return post(`mutation {removeRole(id: ${newItem.id}) {name}}`)
           .expect(200)
           .expect((res) => {
-            expect(res.body.data.removeRole.name).toEqual(newRole.name);
+            expect(res.body.data.removeRole.name).toEqual(newItem.name);
           });
       });
 
       it('should get an error requesting the removed role', () => {
-        return post(`{role(id: ${newRole.id}) {id name}}`)
+        return post(`{role(id: ${newItem.id}) {id name}}`)
           .expect(200)
           .expect((res) => {
             expect(res.body.data).toBeNull();

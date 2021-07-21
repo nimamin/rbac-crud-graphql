@@ -23,13 +23,8 @@ export class UsersResolver {
   ) {}
 
   @Mutation(() => User)
-  createUser(
-    @Args('username') username: string,
-    @Args('role', { type: () => Int, nullable: true }) role: number,
-    @Args('permissions', { type: () => [Int], nullable: true })
-    permissions: number[],
-  ) {
-    return this.usersService.create(username, role, permissions);
+  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+    return this.usersService.create(createUserInput);
   }
 
   @Query(() => [User], { name: 'users' })
@@ -43,14 +38,8 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  updateUser(
-    @Args('id', { type: () => Int }) id: number,
-    @Args('username') username: string,
-    @Args('role', { type: () => Int, nullable: true }) role: number,
-    @Args('permissions', { type: () => [Int], nullable: true })
-    permissions: number[],
-  ) {
-    return this.usersService.update(id, username, role, permissions);
+  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
+    return this.usersService.update(updateUserInput);
   }
 
   @Mutation(() => User)

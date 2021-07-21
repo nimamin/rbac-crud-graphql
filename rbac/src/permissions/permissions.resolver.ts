@@ -9,8 +9,10 @@ export class PermissionsResolver {
   constructor(private readonly permissionsService: PermissionsService) {}
 
   @Mutation(() => Permission)
-  createPermission(@Args('name') name: string) {
-    return this.permissionsService.create(name);
+  createPermission(
+    @Args('createPermissionInput') createPermissionInput: CreatePermissionInput,
+  ) {
+    return this.permissionsService.create(createPermissionInput);
   }
 
   @Query(() => [Permission], { name: 'permissions' })
@@ -25,10 +27,9 @@ export class PermissionsResolver {
 
   @Mutation(() => Permission)
   updatePermission(
-    @Args('id', { type: () => Int }) id: number,
-    @Args('name') name: string,
+    @Args('updatePermissionInput') updatePermissionInput: UpdatePermissionInput,
   ) {
-    return this.permissionsService.update(id, name);
+    return this.permissionsService.update(updatePermissionInput);
   }
 
   @Mutation(() => Permission)

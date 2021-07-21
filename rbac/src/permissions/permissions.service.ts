@@ -14,12 +14,14 @@ export class PermissionsService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
-  async create(name: string) {
-    let per = await this.permissionRepository.findOne({ name });
+  async create(createPermissionInput: CreatePermissionInput) {
+    let per = await this.permissionRepository.findOne({
+      name: createPermissionInput.name,
+    });
 
     if (!per) {
       per = new Permission();
-      per.name = name;
+      per.name = createPermissionInput.name;
       per = await this.permissionRepository.save(per);
     }
 
@@ -33,8 +35,8 @@ export class PermissionsService {
   findMany(ids: number[]) {
     return this.permissionRepository.find({
       where: {
-        id: In(ids)
-      }
+        id: In(ids),
+      },
     });
   }
 
@@ -46,12 +48,14 @@ export class PermissionsService {
     return permission;
   }
 
-  async update(id: number, name: string) {
-    let permission = await this.permissionRepository.findOne({ id });
+  async update(updatePermissionInput: UpdatePermissionInput) {
+    let permission = await this.permissionRepository.findOne({
+      id: updatePermissionInput.id,
+    });
     if (!permission) {
       throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
     }
-    permission.name = name;
+    permission.name = updatePermissionInput.name;
     return this.permissionRepository.save(permission);
   }
 

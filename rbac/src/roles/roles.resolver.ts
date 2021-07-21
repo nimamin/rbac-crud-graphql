@@ -9,8 +9,8 @@ export class RolesResolver {
   constructor(private readonly rolesService: RolesService) {}
 
   @Mutation(() => Role)
-  async createRole(@Args('name') name: string) {
-    return await this.rolesService.create(name);
+  async createRole(@Args('createRoleInput') createRoleInput: CreateRoleInput) {
+    return await this.rolesService.create(createRoleInput);
   }
 
   @Query(() => [Role], { name: 'roles' })
@@ -24,11 +24,8 @@ export class RolesResolver {
   }
 
   @Mutation(() => Role)
-  updateRole(
-    @Args('id', { type: () => Int }) id: number,
-    @Args('name') name: string,
-  ) {
-    return this.rolesService.update(id, name);
+  updateRole(@Args('updateRoleInput') updateRoleInput: UpdateRoleInput) {
+    return this.rolesService.update(updateRoleInput);
   }
 
   @Mutation(() => Role)

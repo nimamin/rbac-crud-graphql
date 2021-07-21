@@ -38,7 +38,9 @@ describe('AppController (e2e)', () => {
       });
 
       it('should create a new permission', () => {
-        return post('mutation {createPermission(name: "justfortest") {id, name}}')
+        return post(
+          'mutation {createPermission(createPermissionInput: {name: "justfortest"}) {id, name}}',
+        )
           .expect(200)
           .expect((res) => {
             expect(res.body.data.createPermission.name).toEqual('justfortest');
@@ -66,11 +68,13 @@ describe('AppController (e2e)', () => {
 
       it('should update the new permission', () => {
         return post(
-          `mutation {updatePermission(id: ${newItem.id}, name: "justfortestedited") {id, name}}`,
+          `mutation {updatePermission(updatePermissionInput: {id: ${newItem.id}, name: "justfortestedited"}) {id, name}}`,
         )
           .expect(200)
           .expect((res) => {
-            expect(res.body.data.updatePermission.name).toEqual('justfortestedited');
+            expect(res.body.data.updatePermission.name).toEqual(
+              'justfortestedited',
+            );
             expect(res.body.data.updatePermission.id).toBeDefined();
             newItem = res.body.data.updatePermission;
           });

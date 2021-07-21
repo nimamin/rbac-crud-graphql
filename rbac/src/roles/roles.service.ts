@@ -11,15 +11,17 @@ export class RolesService {
     @InjectRepository(Role) private roleRepository: Repository<Role>,
   ) {}
 
-  async create(name: string) {
-    let role = await this.roleRepository.findOne({ name });
+  async create(createRoleInput: CreateRoleInput) {
+    let role = await this.roleRepository.findOne({
+      name: createRoleInput.name,
+    });
 
     if (!role) {
       role = new Role();
-      role.name = name;
+      role.name = createRoleInput.name;
       role = await this.roleRepository.save(role);
     }
-    
+
     return role;
   }
 
@@ -35,13 +37,13 @@ export class RolesService {
     return role;
   }
 
-  async update(id: number, name: string) {
-    let role = await this.roleRepository.findOne({ id });
+  async update(updateRoleInput: UpdateRoleInput) {
+    let role = await this.roleRepository.findOne({ id: updateRoleInput.id });
     if (!role) {
       throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
     }
-    role.name = name;
-    return this.roleRepository.save(role)
+    role.name = updateRoleInput.name;
+    return this.roleRepository.save(role);
   }
 
   async remove(id: number) {
@@ -49,6 +51,6 @@ export class RolesService {
     if (!role) {
       throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
     }
-    return await this.roleRepository.remove(role)
+    return await this.roleRepository.remove(role);
   }
 }

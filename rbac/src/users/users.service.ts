@@ -14,17 +14,21 @@ export class UsersService {
     private readonly permissionService: PermissionsService,
   ) {}
 
-  async create(username: string, roleId?: number, permissions?: number[]) {
-    let user = await this.userRepository.findOne({ username });
+  async create(createUserInput: CreateUserInput) {
+    let user = await this.userRepository.findOne({
+      username: createUserInput.username,
+    });
 
     if (user) {
       throw new HttpException('Item already exists!', HttpStatus.FOUND);
     } else {
       user = new User();
-      user.username = username;
-      if (roleId) user.role_id = roleId;
-      if (permissions)
-        user.permissions = await this.permissionService.findMany(permissions);
+      user.username = createUserInput.username;
+      if (createUserInput.role) user.role_id = createUserInput.role;
+      if (createUserInput.permissions)
+        user.permissions = await this.permissionService.findMany(
+          createUserInput.permissions,
+        );
       user = await this.userRepository.save(user);
     }
 
@@ -43,20 +47,17 @@ export class UsersService {
     return user;
   }
 
-  async update(
-    id: number,
-    username?: string,
-    roleId?: number,
-    permissions?: number[],
-  ) {
-    let user = await this.userRepository.findOne({ id });
+  async update(updateUserInput: UpdateUserInput) {
+    let user = await this.userRepository.findOne({ id: updateUserInput.id });
     if (!user) {
       throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
     }
-    user.username = username;
-    if (roleId) user.role_id = roleId;
-    if (permissions)
-      user.permissions = await this.permissionService.findMany(permissions);
+    user.username = updateUserInput.username;
+    if (updateUserInput.role) user.role_id = updateUserInput.role;
+    if (updateUserInput.permissions)
+      user.permissions = await this.permissionService.findMany(
+        updateUserInput.permissions,
+      );
     return this.userRepository.save(user);
   }
 
