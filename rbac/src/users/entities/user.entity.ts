@@ -42,7 +42,7 @@ export class User {
   @Field((type) => [Permission], { nullable: 'itemsAndList' })
   permissions?: Permission[];
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => Int, { nullable: true })
   role_id?: number;
 }

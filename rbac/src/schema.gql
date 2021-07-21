@@ -30,8 +30,8 @@ type Query {
 }
 
 type Mutation {
-  createUser(username: String!): User!
-  updateUser(username: String!, id: Int!): User!
+  createUser(permissions: [Int!], role: Int, username: String!): User!
+  updateUser(permissions: [Int!], role: Int, username: String!, id: Int!): User!
   removeUser(id: Int!): User!
   createRole(name: String!): Role!
   updateRole(name: String!, id: Int!): Role!

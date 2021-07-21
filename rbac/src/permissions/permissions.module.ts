@@ -3,7 +3,7 @@ import { PermissionsService } from './permissions.service';
 import { PermissionsResolver } from './permissions.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Permission } from './entities/permission.entity';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Permission, User])],
