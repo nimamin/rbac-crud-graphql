@@ -24,6 +24,7 @@ import PeopleIcon from "@material-ui/icons/People";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import Roles from "../datatables/Roles";
+import Permissions from "../datatables/Permissions";
 
 function Copyright() {
   return (
@@ -139,6 +140,21 @@ export default function Dashboard() {
   const handlePageChange = (p: Page) => {
     setPage(p);
   };
+  let pageContent = <></>;
+  switch (page) {
+    case Page.Users:
+      // pageContent = <Roles />;
+      break;
+    case Page.Roles:
+      pageContent = <Roles />;
+      break;
+    case Page.Permissions:
+      pageContent = <Permissions />;
+      break;
+  
+    default:
+      break;
+  }
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -234,7 +250,7 @@ export default function Dashboard() {
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Roles />
+                {pageContent}
                 {/* <DataTable /> */}
               </Paper>
             </Grid>

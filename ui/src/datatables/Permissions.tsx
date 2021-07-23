@@ -15,12 +15,12 @@ import {
   gql,
 } from "@apollo/client";
 import Title from "./Title";
-import { Mod, Role } from "./Types";
-import RoleBody from "./Role";
+import { Mod, Permission } from "./Types";
+import PermissionBody from "./Permission";
 
-const ALLROLES = gql`
+const ALLPERMS = gql`
   query {
-    roles {
+    permissions {
       id
       name
     }
@@ -42,7 +42,7 @@ export default function Orders() {
   const [mod, setMod] = React.useState(Mod.Read);
   const [selectedItem, setSelectedItem] = React.useState({ id: 0, name: "" });
 
-  const { loading, error, data, refetch } = useQuery(ALLROLES);
+  const { loading, error, data, refetch } = useQuery(ALLPERMS);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
@@ -56,7 +56,7 @@ export default function Orders() {
     refetch();
   };
 
-  const handleCRUD = (m: Mod, item?: Role) => {
+  const handleCRUD = (m: Mod, item?: Permission) => {
     if (item) setSelectedItem(item);
     setMod(m);
     setOpen(true);
@@ -64,7 +64,7 @@ export default function Orders() {
 
   return (
     <React.Fragment>
-      <Title>Roles</Title>
+      <Title>Permissions</Title>
       <Typography>
         <Button variant="contained" onClick={() => handleCRUD(Mod.Create)}>
           Create
@@ -81,7 +81,7 @@ export default function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.roles.map((item: Role) => (
+          {data.permissions.map((item: Permission) => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
               <TableCell>{item.name}</TableCell>
@@ -116,7 +116,7 @@ export default function Orders() {
         </TableBody>
       </Table>
       <Modal open={open} onClose={handleClose}>
-        <RoleBody item={selectedItem} mod={mod} />
+        <PermissionBody item={selectedItem} mod={mod} />
       </Modal>
     </React.Fragment>
   );

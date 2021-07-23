@@ -1,7 +1,7 @@
 import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import { HasID, Mod, Role } from "./Types";
+import { HasID, Mod, Permission } from "./Types";
 import { Button, TextField } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -20,50 +20,50 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ALLROLES = gql`
+const ALLPERMS = gql`
   query {
-    roles {
+    permissions {
       id
       name
     }
   }
 `;
 
-const GET_ROLE = gql`
-  query Role($id: Int!) {
-    role(id: $id) {
+const GET_PERM = gql`
+  query Permission($id: Int!) {
+    permission(id: $id) {
       id
       name
     }
   }
 `;
 
-interface HasRolePropsType {
-  item: Role;
+interface HasPermissionPropsType {
+  item: Permission;
 }
 interface HasModPropsType {
   mod: Mod;
 }
-interface BodyPropsType extends HasRolePropsType, HasModPropsType {}
+interface BodyPropsType extends HasPermissionPropsType, HasModPropsType {}
 
-function Reader({ item }: HasRolePropsType) {
-  const { loading, error, data } = useQuery(GET_ROLE, {
+function Reader({ item }: HasPermissionPropsType) {
+  const { loading, error, data } = useQuery(GET_PERM, {
     variables: { id: item.id },
   });
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-  let role: Role = data.role;
+  let permission: Permission = data.permission;
   return (
     <>
-      <h2>Role ID: {role.id}</h2>
-      <p>Name: {role.name}</p>
+      <h2>Permission ID: {permission.id}</h2>
+      <p>Name: {permission.name}</p>
     </>
   );
 }
 
-const CREATE_ROLE = gql`
-  mutation CreateRole($name: String!) {
-    createRole(createRoleInput: { name: $name }) {
+const CREATE_PERM = gql`
+  mutation CreatePermission($name: String!) {
+    createPermission(createPermissionInput: { name: $name }) {
       id
       name
     }
@@ -71,28 +71,28 @@ const CREATE_ROLE = gql`
 `;
 
 function Creator() {
-  const [createRole, { data }] = useMutation(CREATE_ROLE);
+  const [createPermission, { data }] = useMutation(CREATE_PERM);
   const [name, setName] = React.useState("");
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
   if (data) {
-    let role: Role = data.createRole;
+    let permission: Permission = data.createPermission;
     return (
       <>
-        <h2>New Role successfully created!</h2>
-        <p>ID: {role.id}</p>
-        <p>Name: {role.name}</p>
+        <h2>New Permission successfully created!</h2>
+        <p>ID: {permission.id}</p>
+        <p>Name: {permission.name}</p>
       </>
     );
   }
   return (
     <>
-      <h2>Create a new role.</h2>
+      <h2>Create a new permission.</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          createRole({ variables: { name } });
+          createPermission({ variables: { name } });
         }}
       >
         <TextField label="Name" value={name} onChange={handleChange} />
@@ -104,38 +104,38 @@ function Creator() {
   );
 }
 
-const UPDATE_ROLE = gql`
-  mutation UpdateRole($id: Int!, $name: String!) {
-    updateRole(updateRoleInput: { id: $id, name: $name }) {
+const UPDATE_PERM = gql`
+  mutation UpdatePermission($id: Int!, $name: String!) {
+    updatePermission(updatePermissionInput: { id: $id, name: $name }) {
       id
       name
     }
   }
 `;
 
-function Editor({ item }: HasRolePropsType) {
-  const [updateRole, updateData] = useMutation(UPDATE_ROLE);
+function Editor({ item }: HasPermissionPropsType) {
+  const [updatePermission, updateData] = useMutation(UPDATE_PERM);
   const [name, setName] = React.useState(item.name);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
   if (updateData.data) {
-    let role: Role = updateData.data.updateRole;
+    let permission: Permission = updateData.data.updatePermission;
     return (
       <>
-        <h2>The Role successfully updated!</h2>
-        <p>ID: {role.id}</p>
-        <p>Name: {role.name}</p>
+        <h2>The Permission successfully updated!</h2>
+        <p>ID: {permission.id}</p>
+        <p>Name: {permission.name}</p>
       </>
     );
   }
   return (
     <>
-      <h2>Edit Role ID: {item.id}</h2>
+      <h2>Edit Permission ID: {item.id}</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          updateRole({ variables: { id: item.id, name } });
+          updatePermission({ variables: { id: item.id, name } });
         }}
       >
         <TextField label="Name" value={name} onChange={handleChange} />
@@ -147,33 +147,33 @@ function Editor({ item }: HasRolePropsType) {
   );
 }
 
-const REMOVE_ROLE = gql`
-  mutation RemoveRole($id: Int!) {
-    removeRole(id: $id) {
+const REMOVE_PERM = gql`
+  mutation RemovePermission($id: Int!) {
+    removePermission(id: $id) {
       name
     }
   }
 `;
-function Remover({ item }: HasRolePropsType) {
-  const [removeRole, { data }] = useMutation(REMOVE_ROLE);
+function Remover({ item }: HasPermissionPropsType) {
+  const [removePermission, { data }] = useMutation(REMOVE_PERM);
   if (data) {
-    let name: string = data.removeRole.name;
+    let name: string = data.removePermission.name;
     return (
       <>
-        <h2>The Role successfully removed!</h2>
+        <h2>The Permission successfully removed!</h2>
         <p>Name: {name}</p>
       </>
     );
   }
   return (
     <>
-      <h2>Are you sure you want to delete this Role?</h2>
+      <h2>Are you sure you want to delete this Permission?</h2>
       <p>ID: {item.id}</p>
       <p>Name: {item.name}</p>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          removeRole({ variables: { id: item.id } });
+          removePermission({ variables: { id: item.id } });
         }}
       >
         <Button color="secondary" variant="contained" type="submit">
@@ -184,7 +184,7 @@ function Remover({ item }: HasRolePropsType) {
   );
 }
 
-export default function RoleBody({ item, mod }: BodyPropsType) {
+export default function PermissionBody({ item, mod }: BodyPropsType) {
   const classes = useStyles();
   let currentBody = <></>;
   switch (mod) {
