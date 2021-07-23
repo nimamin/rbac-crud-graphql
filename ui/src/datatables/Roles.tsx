@@ -16,6 +16,7 @@ import {
 } from "@apollo/client";
 import Title from "./Title";
 import { Mod, Role } from "./Types";
+import RoleBody from "./Role";
 
 const ALLROLES = gql`
   query {
@@ -26,82 +27,14 @@ const ALLROLES = gql`
   }
 `;
 
-function preventDefault(event: React.MouseEvent) {
-  event.preventDefault();
-}
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     seeMore: {
       marginTop: theme.spacing(3),
     },
-    paper: {
-      position: "absolute",
-      width: 400,
-      backgroundColor: theme.palette.background.paper,
-      border: "2px solid #000",
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-      top: "50%",
-      left: "50%",
-      transform: `translate(-50%, -50%)`,
-    },
   })
 );
 
-
-interface BodyPropsType {
-  item: Role;
-  mod: Mod;
-}
-
-function Body({ item, mod }: BodyPropsType) {
-  const classes = useStyles();
-  const readBody = (
-    <div className={classes.paper}>
-      <h2>Role ID: {item.id}</h2>
-      <p>Name: {item.name}</p>
-    </div>
-  );
-  const editBody = (
-    <div className={classes.paper}>
-      <h2>Edit Role ID: {item.id}</h2>
-      <p>Name: {item.name}</p>
-    </div>
-  );
-  const createBody = (
-    <div className={classes.paper}>
-      <h2>Create a new role.</h2>
-      <p>Name: {item.name}</p>
-    </div>
-  );
-  const deleteBody = (
-    <div className={classes.paper}>
-      <h2>Delete Role ID: {item.id}</h2>
-      <p>Name: {item.name}</p>
-    </div>
-  );
-  let currectBody = <></>;
-  switch (mod) {
-    case Mod.Read:
-      currectBody = readBody;
-      break;
-    case Mod.Edit:
-      currectBody = editBody;
-      break;
-    case Mod.Create:
-      currectBody = createBody;
-      break;
-    case Mod.Delete:
-      currectBody = deleteBody;
-      break;
-  
-    default:
-      currectBody = readBody;
-      break;
-  }
-  return currectBody;
-}
 
 export default function Orders() {
   const classes = useStyles();
@@ -109,8 +42,7 @@ export default function Orders() {
   const [mod, setMod] = React.useState(Mod.Read);
   const [selectedItem, setSelectedItem] = React.useState({ id: 0, name: "" });
 
-  const { loading, error, data } = useQuery(ALLROLES);
-  console.log({ loading, error, data });
+  const { loading, error, data, refetch } = useQuery(ALLROLES);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
@@ -121,8 +53,9 @@ export default function Orders() {
 
   const handleClose = () => {
     setOpen(false);
+    refetch();
   };
-
+console.log(process.env)
   const handleCRUD = (m: Mod, item?: Role) => {
     if (item) setSelectedItem(item);
     setMod(m);
@@ -183,7 +116,7 @@ export default function Orders() {
         </TableBody>
       </Table>
       <Modal open={open} onClose={handleClose}>
-        <Body item={selectedItem} mod={mod} />
+        <RoleBody item={selectedItem} mod={mod} />
       </Modal>
     </React.Fragment>
   );

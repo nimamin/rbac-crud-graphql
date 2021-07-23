@@ -5,18 +5,18 @@ export enum Mod {
   Delete,
 }
 
-export interface Role {
+export interface HasID {
   id: number;
+}
+export interface Role extends HasID {
   name: string;
 }
 
-export interface Permission {
-  id: number;
+export interface Permission extends HasID {
   name: string;
 }
 
-export interface User {
-  id: number;
+export interface User extends HasID {
   username: string;
   role: Role;
   permissions: Permission[];
