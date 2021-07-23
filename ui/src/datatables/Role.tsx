@@ -38,18 +38,15 @@ const GET_ROLE = gql`
   }
 `;
 
-interface HasIDPropsType {
-  item: HasID;
-}
 interface HasRolePropsType {
   item: Role;
 }
 interface HasModPropsType {
   mod: Mod;
 }
-interface BodyPropsType extends HasIDPropsType, HasModPropsType {}
+interface BodyPropsType extends HasRolePropsType, HasModPropsType {}
 
-function Reader({ item }: HasIDPropsType) {
+function Reader({ item }: HasRolePropsType) {
   const { loading, error, data } = useQuery(GET_ROLE, {
     variables: { id: item.id },
   });
@@ -108,15 +105,15 @@ function Creator() {
 }
 
 const UPDATE_ROLE = gql`
-  mutation UpdateRole($name: String!) {
-    updateRole(updateRoleInput: { name: $name }) {
+  mutation UpdateRole($id: Int!, $name: String!) {
+    updateRole(updateRoleInput: { id: $id, name: $name }) {
       id
       name
     }
   }
 `;
 
-function Updator({ item }: HasRolePropsType) {
+function Editor({ item }: HasRolePropsType) {
   const [updateRole, updateData] = useMutation(UPDATE_ROLE);
   const [name, setName] = React.useState(item.name);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,7 +135,7 @@ function Updator({ item }: HasRolePropsType) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          updateRole({ variables: { name } });
+          updateRole({ variables: { id: item.id, name } });
         }}
       >
         <TextField label="Name" value={name} onChange={handleChange} />
@@ -150,21 +147,39 @@ function Updator({ item }: HasRolePropsType) {
   );
 }
 
-function Editor({ item }: HasIDPropsType) {
-  const { loading, error, data } = useQuery(GET_ROLE, {
-    variables: { id: item.id },
-  });
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
-  let role: Role = data.role;
-  return <Updator item={role} />;
-}
-
-function Remover({ item }: HasIDPropsType) {
+const REMOVE_ROLE = gql`
+  mutation RemoveRole($id: Int!) {
+    removeRole(id: $id) {
+      name
+    }
+  }
+`;
+function Remover({ item }: HasRolePropsType) {
+  const [removeRole, {data}] = useMutation(REMOVE_ROLE);
+  if (data) {
+    let name: string = data.removeRole.name;
+    return (
+      <>
+        <h2>The Role successfully removed!</h2>
+        <p>Name: {name}</p>
+      </>
+    );
+  }
   return (
     <>
-      <h2>Remove Role ID: {item.id}</h2>
-      {/* <p>Name: {item.name}</p> */}
+      <h2>Are you sure you want to delete this Role?</h2>
+      <p>ID: {item.id}</p>
+      <p>Name: {item.name}</p>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          removeRole({ variables: { id: item.id } });
+        }}
+      >
+        <Button color="secondary" variant="contained" type="submit">
+          Delete
+        </Button>
+      </form>
     </>
   );
 }

@@ -55,7 +55,7 @@ export default function Orders() {
     setOpen(false);
     refetch();
   };
-console.log(process.env)
+
   const handleCRUD = (m: Mod, item?: Role) => {
     if (item) setSelectedItem(item);
     setMod(m);
