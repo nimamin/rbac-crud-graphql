@@ -18,6 +18,6 @@ export interface Permission extends HasID {
 
 export interface User extends HasID {
   username: string;
-  role: Role;
-  permissions: Permission[];
+  role?: Role;
+  permissions?: Permission[];
 }

@@ -24,6 +24,7 @@ import PeopleIcon from "@material-ui/icons/People";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import Roles from "../datatables/Roles";
+import Users from "../datatables/Users";
 import Permissions from "../datatables/Permissions";
 
 function Copyright() {
@@ -143,7 +144,7 @@ export default function Dashboard() {
   let pageContent = <></>;
   switch (page) {
     case Page.Users:
-      // pageContent = <Roles />;
+      pageContent = <Users />;
       break;
     case Page.Roles:
       pageContent = <Roles />;
