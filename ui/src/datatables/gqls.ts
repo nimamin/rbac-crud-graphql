@@ -133,10 +133,14 @@ export const CREATE_USER = gql`
   }
 `;
 export const UPDATE_USER = gql`
-  mutation UpdateUser($id: Int!, $username: String!) {
-    updateUser(updateUserInput: { id: $id, username: $username }) {
+  mutation UpdateUser($id: Int!, $username: String!, $role: Int) {
+    updateUser(updateUserInput: { id: $id, username: $username, role: $role }) {
       id
       username
+      role {
+        id
+        name
+      }
     }
   }
 `;

@@ -18,9 +18,9 @@ export default function Editor({ item }: HasRolePropsType) {
   const classes = useStyles();
   const [updateRole, updateData] = useMutation(UPDATE_ROLE);
   const [name, setName] = React.useState(item.name);
-  let pids: number[] = [];
-  if (item.permissions) pids = item.permissions.map(p => p.id)
-  const [permissionIds, setPermissionIds] = React.useState<number[]>(pids);
+  const [permissionIds, setPermissionIds] = React.useState<number[]>(
+    item.permissions? item.permissions.map(p => p.id): []
+  );
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };

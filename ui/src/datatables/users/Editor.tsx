@@ -1,14 +1,29 @@
 import React from "react";
 import { useMutation } from "@apollo/client";
 import { HasUserPropsType, User } from "../Types";
-import { Button, TextField } from "@material-ui/core";
+import { Button, createStyles, FormControl, makeStyles, TextField, Theme } from "@material-ui/core";
 import { UPDATE_USER } from "../gqls";
+import RoleSelector from "../roles/RoleSelector";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+  })
+);
 
 export default function Editor({ item }: HasUserPropsType) {
+  const classes = useStyles();
   const [updateUser, updateData] = useMutation(UPDATE_USER);
-  const [username, setName] = React.useState(item.username);
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
+  const [username, setUserName] = React.useState(item.username);
+  const [roleId, setRoleId] = React.useState<number>(item.role? item.role.id: 0);
+  const handleUserNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserName(event.target.value);
+  };
+  const handleRoleChange = (value: number) => {
+    setRoleId(value);
   };
   if (updateData.data) {
     let user: User = updateData.data.updateUser;
@@ -17,6 +32,7 @@ export default function Editor({ item }: HasUserPropsType) {
         <h2>The User successfully updated!</h2>
         <p>ID: {user.id}</p>
         <p>Name: {user.username}</p>
+        <p>Role: {user.role?.name}</p>
       </div>
     );
   }
@@ -26,13 +42,22 @@ export default function Editor({ item }: HasUserPropsType) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          updateUser({ variables: { id: item.id, username } });
+          updateUser({ variables: { id: item.id, username, role: roleId } });
         }}
       >
-        <TextField label="Name" value={username} onChange={handleChange} />
-        <Button color="primary" variant="contained" type="submit">
-          Update
-        </Button>
+        <FormControl className={classes.formControl}>
+          <TextField
+            label="Username"
+            value={username}
+            onChange={handleUserNameChange}
+          />
+        </FormControl>
+        <RoleSelector item={roleId} onChange={handleRoleChange} />
+        <FormControl className={classes.formControl}>
+          <Button color="primary" variant="contained" type="submit">
+            Update
+          </Button>
+        </FormControl>
       </form>
     </div>
   );
