@@ -1,6 +1,6 @@
 import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { HasModPropsType, HasRolePropsType, Mod } from "../Types";
+import { HasModPropsType, HasPermissionPropsType, Mod } from "../Types";
 import Reader from "./Reader";
 import Creator from "./Creator";
 import Editor from "./Editor";
@@ -22,9 +22,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface BodyPropsType extends HasRolePropsType, HasModPropsType {}
+interface BodyPropsType extends HasPermissionPropsType, HasModPropsType {}
 
-export default function RoleBody({ item, mod }: BodyPropsType) {
+export default function PermissionBody({ item, mod }: BodyPropsType) {
   const classes = useStyles();
   let currentBody = <></>;
   switch (mod) {

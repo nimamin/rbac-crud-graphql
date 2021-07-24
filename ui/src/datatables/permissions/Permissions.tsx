@@ -9,10 +9,10 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Modal from "@material-ui/core/Modal";
 import { useQuery } from "@apollo/client";
-import Title from "./Title";
-import { Mod, Permission } from "./Types";
+import Title from "../Title";
+import { Mod, Permission } from "../Types";
 import PermissionBody from "./Permission";
-import { ALLPERMS } from "./gqls";
+import { ALLPERMS } from "../gqls";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
