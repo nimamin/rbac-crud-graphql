@@ -1,5 +1,4 @@
 import React from "react";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -14,17 +13,7 @@ import { Mod, User } from "../Types";
 import UserBody from "./User";
 import { ALLUSERS } from "../gqls";
 
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    seeMore: {
-      marginTop: theme.spacing(3),
-    },
-  })
-);
-
 export default function Users() {
-  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [mod, setMod] = React.useState(Mod.Read);
   const [selectedItem, setSelectedItem] = React.useState<User>({
@@ -35,11 +24,6 @@ export default function Users() {
   const { loading, error, data, refetch } = useQuery(ALLUSERS);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-
-  const handleOpen = (e: any) => {
-    console.log("key:", e.target.parent.parent.getAttribute("key"));
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);

@@ -111,12 +111,12 @@ export const GET_USER = gql`
   }
 `;
 export const CREATE_USER = gql`
-  mutation CreateUser($username: String!, $roleId: Int, $permissionIds: [Int]) {
+  mutation CreateUser($username: String!, $role: Int, $permissions: [Int]) {
     createUser(
       createUserInput: {
         username: $username
-        role: $roleId
-        permissions: $permissionIds
+        role: $role
+        permissions: $permissions
       }
     ) {
       id

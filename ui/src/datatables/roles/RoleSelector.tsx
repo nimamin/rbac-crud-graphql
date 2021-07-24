@@ -18,6 +18,9 @@ export default function RoleSelector(props: any) {
   const { loading, error, data } = useQuery(ALLROLES);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    props.onChange(event.target.value as number);
+  };
   return (
     <FormControl className={classes.formControl}>
       <InputLabel id="role-select-label">Role</InputLabel>
@@ -25,10 +28,10 @@ export default function RoleSelector(props: any) {
         labelId="role-select-label"
         id="role-select"
         value={props.item}
-        onChange={props.onChange}
+        onChange={handleChange}
       >
         {data.roles?.map((role: Role) => (
-          <MenuItem value={role.id}>{role.name}</MenuItem>
+          <MenuItem key={role.id} value={role.id}>{role.name}</MenuItem>
         ))}
       </Select>
     </FormControl>

@@ -1,5 +1,4 @@
 import React from "react";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -16,17 +15,7 @@ import { Mod, Role } from "../Types";
 import RoleBody from "./Role";
 import { ALLROLES } from "../gqls";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    seeMore: {
-      marginTop: theme.spacing(3),
-    },
-  })
-);
-
-
-export default function Orders() {
-  const classes = useStyles();
+export default function Roles() {
   const [open, setOpen] = React.useState(false);
   const [mod, setMod] = React.useState(Mod.Read);
   const [selectedItem, setSelectedItem] = React.useState({ id: 0, name: "" });
@@ -34,11 +23,6 @@ export default function Orders() {
   const { loading, error, data, refetch } = useQuery(ALLROLES);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-
-  const handleOpen = (e: any) => {
-    console.log("key:", e.target.parent.parent.getAttribute("key"));
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);

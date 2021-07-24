@@ -56,7 +56,7 @@ export default function Creator() {
           e.preventDefault();
           console.log({ variables: { username, roleId, permissionIds } });
 
-          createUser({ variables: { username, roleId, permissionIds } });
+          createUser({ variables: { username, role: roleId, permissions: permissionIds } });
         }}
       >
         <FormControl className={classes.formControl}>
