@@ -15,6 +15,12 @@ export default function Reader({ item }: HasRolePropsType) {
     <div>
       <h2>Role ID: {role.id}</h2>
       <p>Name: {role.name}</p>
+      <p>
+        Permissions:
+        {role.permissions?.map((perm) => (
+          <span> {perm.name} </span>
+        ))}
+      </p>
     </div>
   );
 }

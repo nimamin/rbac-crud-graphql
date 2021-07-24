@@ -9,6 +9,7 @@ export interface HasID {
 }
 export interface Role extends HasID {
   name: string;
+  permissions?: Permission[];
 }
 export interface Permission extends HasID {
   name: string;
@@ -16,7 +17,6 @@ export interface Permission extends HasID {
 export interface User extends HasID {
   username: string;
   role?: Role;
-  permissions?: Permission[];
 }
 export interface HasRolePropsType {
   item: Role;

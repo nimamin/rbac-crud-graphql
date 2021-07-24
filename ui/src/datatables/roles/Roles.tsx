@@ -48,6 +48,7 @@ export default function Roles() {
           <TableRow>
             <TableCell>ID</TableCell>
             <TableCell>Name</TableCell>
+            <TableCell>Permissions</TableCell>
             <TableCell>Read</TableCell>
             <TableCell>Edit</TableCell>
             <TableCell>Delete</TableCell>
@@ -58,6 +59,7 @@ export default function Roles() {
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
               <TableCell>{item.name}</TableCell>
+              <TableCell>{item.permissions?.map(p => p.name).join(", ")}</TableCell>
               <TableCell>
                 <Button
                   variant="contained"

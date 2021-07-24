@@ -15,12 +15,6 @@ export default function Reader({ item }: HasUserPropsType) {
       <h2>User ID: {user.id}</h2>
       <p>Name: {user.username}</p>
       <p>Role: {user.role?.name}</p>
-      <p>
-        Permissions:
-        {user.permissions?.map((perm) => (
-          <span> {perm.name} </span>
-        ))}
-      </p>
     </div>
   );
 }

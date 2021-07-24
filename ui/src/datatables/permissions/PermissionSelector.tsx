@@ -24,10 +24,10 @@ export default function PermissionSelector(props: any) {
     event: React.ChangeEvent<{ value: unknown }>
   ) => {
     const { options } = event.target as HTMLSelectElement;
-    const value: string[] = [];
+    const value: number[] = [];
     for (let i = 0, l = options.length; i < l; i += 1) {
       if (options[i].selected) {
-        value.push(options[i].value);
+        value.push(parseInt(options[i].value));
       }
     }
     props.onChange(value);

@@ -5,6 +5,10 @@ export const ALLROLES = gql`
     roles {
       id
       name
+      permissions {
+        id
+        name
+      }
     }
   }
 `;
@@ -13,22 +17,36 @@ export const GET_ROLE = gql`
     role(id: $id) {
       id
       name
+      permissions {
+        id
+        name
+      }
     }
   }
 `;
 export const CREATE_ROLE = gql`
-  mutation CreateRole($name: String!) {
-    createRole(createRoleInput: { name: $name }) {
+  mutation CreateRole($name: String!, $permissions: [Int]) {
+    createRole(createRoleInput: { name: $name, permissions: $permissions }) {
       id
       name
+      permissions {
+        id
+        name
+      }
     }
   }
 `;
 export const UPDATE_ROLE = gql`
-  mutation UpdateRole($id: Int!, $name: String!) {
-    updateRole(updateRoleInput: { id: $id, name: $name }) {
+  mutation UpdateRole($id: Int!, $name: String!, $permissions: [Int]) {
+    updateRole(
+      updateRoleInput: { id: $id, name: $name, permissions: $permissions }
+    ) {
       id
       name
+      permissions {
+        id
+        name
+      }
     }
   }
 `;
@@ -87,10 +105,6 @@ export const ALLUSERS = gql`
         id
         name
       }
-      permissions {
-        id
-        name
-      }
     }
   }
 `;
@@ -103,29 +117,15 @@ export const GET_USER = gql`
         id
         name
       }
-      permissions {
-        id
-        name
-      }
     }
   }
 `;
 export const CREATE_USER = gql`
-  mutation CreateUser($username: String!, $role: Int, $permissions: [Int]) {
-    createUser(
-      createUserInput: {
-        username: $username
-        role: $role
-        permissions: $permissions
-      }
-    ) {
+  mutation CreateUser($username: String!, $role: Int) {
+    createUser(createUserInput: { username: $username, role: $role }) {
       id
       username
       role {
-        id
-        name
-      }
-      permissions {
         id
         name
       }
