@@ -13,17 +13,29 @@ services:
       - 3000:3000
       - 9229:9229
     command: npm run start:dev
-    env_file:
-      - ./rbac/.env
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_DB: rbac
+      DATABASE_USER: dev
+      DATABASE_PASSWORD: secret
+      DATABASE_PORT: 5432
+    networks:
+      - webnet
+
+  ui:
+    container_name: ui
+    build:
+      context: ./ui
+    volumes:
+      - ./ui:/usr/src/app
+    ports:
+      - 3006:3006
+    environment: 
+      REACT_APP_QRAPHQL_URL: http://localhost:3000
+      PORT: 3006
     networks:
       - webnet
   
-  # redis:
-  #   container_name: redis
-  #   image: redis:5
-  #   networks:
-  #     - webnet
-
   postgres:
     container_name: postgres
     image: postgres:12

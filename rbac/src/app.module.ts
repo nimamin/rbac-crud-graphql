@@ -9,15 +9,17 @@ import { User } from './users/entities/user.entity';
 import { Role } from './roles/entities/role.entity';
 import { Permission } from './permissions/entities/permission.entity';
 
+const env = (name, defaultValue ) =>  process.env[name] ? process.env[name] : defaultValue;
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'dev',
-      password: 'secret',
-      database: 'rbac',
+      host: env('DATABASE_HOST', 'localhost'),
+      port: env('DATABASE_PORT', 5432),
+      username: env('DATABASE_USER', 'dev'),
+      password: env('DATABASE_PASSWORD', 'secret'),
+      database: env('DATABASE_DB', 'rbac'),
       entities: [User, Role, Permission],
       synchronize: true,
       keepConnectionAlive: true,
