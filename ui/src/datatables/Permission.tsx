@@ -1,8 +1,9 @@
 import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { useQuery, gql, useMutation } from "@apollo/client";
-import { HasID, Mod, Permission } from "./Types";
+import { useQuery, useMutation } from "@apollo/client";
+import { Mod, Permission } from "./Types";
 import { Button, TextField } from "@material-ui/core";
+import { CREATE_PERM, GET_PERM, REMOVE_PERM, UPDATE_PERM } from "./gqls";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,24 +20,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-const ALLPERMS = gql`
-  query {
-    permissions {
-      id
-      name
-    }
-  }
-`;
-
-const GET_PERM = gql`
-  query Permission($id: Int!) {
-    permission(id: $id) {
-      id
-      name
-    }
-  }
-`;
 
 interface HasPermissionPropsType {
   item: Permission;
@@ -60,15 +43,6 @@ function Reader({ item }: HasPermissionPropsType) {
     </>
   );
 }
-
-const CREATE_PERM = gql`
-  mutation CreatePermission($name: String!) {
-    createPermission(createPermissionInput: { name: $name }) {
-      id
-      name
-    }
-  }
-`;
 
 function Creator() {
   const [createPermission, { data }] = useMutation(CREATE_PERM);
@@ -104,14 +78,7 @@ function Creator() {
   );
 }
 
-const UPDATE_PERM = gql`
-  mutation UpdatePermission($id: Int!, $name: String!) {
-    updatePermission(updatePermissionInput: { id: $id, name: $name }) {
-      id
-      name
-    }
-  }
-`;
+
 
 function Editor({ item }: HasPermissionPropsType) {
   const [updatePermission, updateData] = useMutation(UPDATE_PERM);
@@ -147,13 +114,6 @@ function Editor({ item }: HasPermissionPropsType) {
   );
 }
 
-const REMOVE_PERM = gql`
-  mutation RemovePermission($id: Int!) {
-    removePermission(id: $id) {
-      name
-    }
-  }
-`;
 function Remover({ item }: HasPermissionPropsType) {
   const [removePermission, { data }] = useMutation(REMOVE_PERM);
   if (data) {

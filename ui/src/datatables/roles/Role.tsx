@@ -1,8 +1,9 @@
 import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { useQuery, gql, useMutation } from "@apollo/client";
-import { HasID, Mod, Role } from "./Types";
+import { useQuery, useMutation } from "@apollo/client";
+import { Mod, Role } from "../Types";
 import { Button, TextField } from "@material-ui/core";
+import { CREATE_ROLE, GET_ROLE, REMOVE_ROLE, UPDATE_ROLE } from "../gqls";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,24 +20,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-const ALLROLES = gql`
-  query {
-    roles {
-      id
-      name
-    }
-  }
-`;
-
-const GET_ROLE = gql`
-  query Role($id: Int!) {
-    role(id: $id) {
-      id
-      name
-    }
-  }
-`;
 
 interface HasRolePropsType {
   item: Role;
@@ -60,15 +43,6 @@ function Reader({ item }: HasRolePropsType) {
     </>
   );
 }
-
-const CREATE_ROLE = gql`
-  mutation CreateRole($name: String!) {
-    createRole(createRoleInput: { name: $name }) {
-      id
-      name
-    }
-  }
-`;
 
 function Creator() {
   const [createRole, { data }] = useMutation(CREATE_ROLE);
@@ -104,15 +78,6 @@ function Creator() {
   );
 }
 
-const UPDATE_ROLE = gql`
-  mutation UpdateRole($id: Int!, $name: String!) {
-    updateRole(updateRoleInput: { id: $id, name: $name }) {
-      id
-      name
-    }
-  }
-`;
-
 function Editor({ item }: HasRolePropsType) {
   const [updateRole, updateData] = useMutation(UPDATE_ROLE);
   const [name, setName] = React.useState(item.name);
@@ -147,13 +112,6 @@ function Editor({ item }: HasRolePropsType) {
   );
 }
 
-const REMOVE_ROLE = gql`
-  mutation RemoveRole($id: Int!) {
-    removeRole(id: $id) {
-      name
-    }
-  }
-`;
 function Remover({ item }: HasRolePropsType) {
   const [removeRole, { data }] = useMutation(REMOVE_ROLE);
   if (data) {

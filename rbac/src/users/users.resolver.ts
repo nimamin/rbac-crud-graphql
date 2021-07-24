@@ -13,6 +13,7 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { RolesService } from '../roles/roles.service';
 import { PermissionsService } from '../permissions/permissions.service';
+import { Role } from 'src/roles/entities/role.entity';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -47,8 +48,9 @@ export class UsersResolver {
     return this.usersService.remove(id);
   }
 
-  @ResolveField()
+  @ResolveField('role', returns => Role)
   async role(@Parent() user: User) {
+    if (!user.role_id) return null;
     return this.rolesService.findOne(user.role_id);
   }
 

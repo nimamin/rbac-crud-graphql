@@ -23,8 +23,8 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import PeopleIcon from "@material-ui/icons/People";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
-import Roles from "../datatables/Roles";
-import Users from "../datatables/Users";
+import Roles from "../datatables/roles/Roles";
+import Users from "../datatables/users/Users";
 import Permissions from "../datatables/Permissions";
 
 function Copyright() {

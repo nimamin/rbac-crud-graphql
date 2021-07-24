@@ -1,6 +1,5 @@
 import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Link from "@material-ui/core/Link";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,24 +7,12 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
 import Modal from "@material-ui/core/Modal";
-import {
-  useQuery,
-  gql,
-} from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import Title from "./Title";
 import { Mod, Permission } from "./Types";
 import PermissionBody from "./Permission";
-
-const ALLPERMS = gql`
-  query {
-    permissions {
-      id
-      name
-    }
-  }
-`;
+import { ALLPERMS } from "./gqls";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,7 +21,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
 
 export default function Orders() {
   const classes = useStyles();

@@ -1,6 +1,5 @@
 import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Link from "@material-ui/core/Link";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,24 +7,14 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
 import Modal from "@material-ui/core/Modal";
 import {
   useQuery,
-  gql,
 } from "@apollo/client";
-import Title from "./Title";
-import { Mod, User } from "./Types";
-import UserBody from "./User";
-
-const ALLUSERS = gql`
-  query {
-    users {
-      id
-      username
-    }
-  }
-`;
+import Title from "../Title";
+import { Mod, Role } from "../Types";
+import RoleBody from "./Role";
+import { ALLROLES } from "../gqls";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,9 +29,9 @@ export default function Orders() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [mod, setMod] = React.useState(Mod.Read);
-  const [selectedItem, setSelectedItem] = React.useState<User>({id:0,username:""});
+  const [selectedItem, setSelectedItem] = React.useState({ id: 0, name: "" });
 
-  const { loading, error, data, refetch } = useQuery(ALLUSERS);
+  const { loading, error, data, refetch } = useQuery(ALLROLES);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
@@ -56,7 +45,7 @@ export default function Orders() {
     refetch();
   };
 
-  const handleCRUD = (m: Mod, item?: User) => {
+  const handleCRUD = (m: Mod, item?: Role) => {
     if (item) setSelectedItem(item);
     setMod(m);
     setOpen(true);
@@ -64,7 +53,7 @@ export default function Orders() {
 
   return (
     <React.Fragment>
-      <Title>Users</Title>
+      <Title>Roles</Title>
       <Typography>
         <Button variant="contained" onClick={() => handleCRUD(Mod.Create)}>
           Create
@@ -81,10 +70,10 @@ export default function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.users.map((item: User) => (
+          {data.roles.map((item: Role) => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
-              <TableCell>{item.username}</TableCell>
+              <TableCell>{item.name}</TableCell>
               <TableCell>
                 <Button
                   variant="contained"
@@ -116,7 +105,7 @@ export default function Orders() {
         </TableBody>
       </Table>
       <Modal open={open} onClose={handleClose}>
-        <UserBody item={selectedItem} mod={mod} />
+        <RoleBody item={selectedItem} mod={mod} />
       </Modal>
     </React.Fragment>
   );
