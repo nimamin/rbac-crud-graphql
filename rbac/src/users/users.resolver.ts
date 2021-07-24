@@ -12,15 +12,13 @@ import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { RolesService } from '../roles/roles.service';
-import { PermissionsService } from '../permissions/permissions.service';
-import { Role } from 'src/roles/entities/role.entity';
+import { Role } from '../roles/entities/role.entity';
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService,
     private readonly rolesService: RolesService,
-    private readonly permissionService: PermissionsService,
   ) {}
 
   @Mutation(() => User)
@@ -54,8 +52,4 @@ export class UsersResolver {
     return this.rolesService.findOne(user.role_id);
   }
 
-  @ResolveField()
-  async permissions(@Parent() user: User) {
-    return this.usersService.getUserPermissions(user.id);
-  }
 }

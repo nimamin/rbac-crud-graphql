@@ -3,14 +3,9 @@ import {
   Column,
   Entity,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
-  OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Permission } from '../../permissions/entities/permission.entity';
 import { Role } from '../../roles/entities/role.entity';
 
 @Entity()
@@ -28,19 +23,6 @@ export class User {
   @JoinColumn({ name: 'role_id' })
   @Field((type) => Role, { nullable: true })
   role?: Role;
-
-  @ManyToMany(() => Permission)
-  @JoinTable({
-    name: 'user_permissions',
-    joinColumn: {
-      name: 'user_id',
-    },
-    inverseJoinColumn: {
-      name: 'permission_id',
-    },
-  })
-  @Field((type) => [Permission], { nullable: 'itemsAndList' })
-  permissions?: Permission[];
 
   @Column({ nullable: true })
   @Field(() => Int, { nullable: true })

@@ -7,5 +7,8 @@ export class UpdateRoleInput extends PartialType(CreateRoleInput) {
   id: number;
 
   @Field()
-  name: string;
+  name?: string;
+
+  @Field((type) => [Int], { nullable: 'itemsAndList' })
+  permissions?: number[];
 }

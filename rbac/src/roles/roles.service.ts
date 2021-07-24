@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PermissionsService } from '../permissions/permissions.service';
 import { Repository } from 'typeorm';
 import { CreateRoleInput } from './dto/create-role.input';
 import { UpdateRoleInput } from './dto/update-role.input';
@@ -9,6 +10,7 @@ import { Role } from './entities/role.entity';
 export class RolesService {
   constructor(
     @InjectRepository(Role) private roleRepository: Repository<Role>,
+    private readonly permissionService: PermissionsService,
   ) {}
 
   async create(createRoleInput: CreateRoleInput) {
@@ -19,6 +21,10 @@ export class RolesService {
     if (!role) {
       role = new Role();
       role.name = createRoleInput.name;
+      if (createRoleInput.permissions)
+        role.permissions = await this.permissionService.findMany(
+          createRoleInput.permissions,
+        );
       role = await this.roleRepository.save(role);
     }
 
@@ -43,6 +49,10 @@ export class RolesService {
       throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
     }
     role.name = updateRoleInput.name;
+    if (updateRoleInput.permissions)
+      role.permissions = await this.permissionService.findMany(
+        updateRoleInput.permissions,
+      );
     return this.roleRepository.save(role);
   }
 
@@ -52,5 +62,13 @@ export class RolesService {
       throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
     }
     return await this.roleRepository.remove(role);
+  }
+
+  async getRolePermissions(id: number) {
+    let user = await this.roleRepository.findOne({
+      where: { id },
+      relations: ['permissions'],
+    });
+    return user.permissions;
   }
 }

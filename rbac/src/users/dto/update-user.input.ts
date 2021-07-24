@@ -7,11 +7,8 @@ export class UpdateUserInput extends PartialType(CreateUserInput) {
   id: number;
 
   @Field()
-  username: string;
+  username?: string;
 
   @Field((type) => Int, { nullable: true })
   role?: number;
-
-  @Field((type) => [Int], { nullable: 'itemsAndList' })
-  permissions?: number[];
 }

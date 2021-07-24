@@ -4,4 +4,7 @@ import { InputType, Int, Field } from '@nestjs/graphql';
 export class CreateRoleInput {
   @Field()
   name: string;
+
+  @Field((type) => [Int], { nullable: 'itemsAndList' })
+  permissions?: number[];
 }

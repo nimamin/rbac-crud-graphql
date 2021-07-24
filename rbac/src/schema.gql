@@ -10,13 +10,13 @@ type Permission {
 type Role {
   id: Int!
   name: String!
+  permissions: [Permission]
 }
 
 type User {
   id: Int!
   username: String!
   role: Role
-  permissions: [Permission]
   role_id: Int
 }
 
@@ -44,22 +44,22 @@ type Mutation {
 input CreateUserInput {
   username: String!
   role: Int
-  permissions: [Int]
 }
 
 input UpdateUserInput {
   username: String!
   role: Int
-  permissions: [Int]
   id: Int!
 }
 
 input CreateRoleInput {
   name: String!
+  permissions: [Int]
 }
 
 input UpdateRoleInput {
   name: String!
+  permissions: [Int]
   id: Int!
 }
 

@@ -7,7 +7,4 @@ export class CreateUserInput {
 
   @Field((type) => Int, { nullable: true })
   role?: number;
-
-  @Field((type) => [Int], { nullable: 'itemsAndList' })
-  permissions?: number[];
 }

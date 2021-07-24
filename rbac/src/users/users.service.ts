@@ -1,17 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Permission } from '../permissions/entities/permission.entity';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
-import { PermissionsService } from '../permissions/permissions.service';
+import { RolesService } from '../roles/roles.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-    private readonly permissionService: PermissionsService,
+    private readonly roleService: RolesService,
   ) {}
 
   async create(createUserInput: CreateUserInput) {
@@ -24,11 +23,8 @@ export class UsersService {
     } else {
       user = new User();
       user.username = createUserInput.username;
-      if (createUserInput.role) user.role_id = createUserInput.role;
-      if (createUserInput.permissions)
-        user.permissions = await this.permissionService.findMany(
-          createUserInput.permissions,
-        );
+      if (createUserInput.role)
+        user.role = await this.roleService.findOne(createUserInput.role);
       user = await this.userRepository.save(user);
     }
 
@@ -53,11 +49,8 @@ export class UsersService {
       throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
     }
     user.username = updateUserInput.username;
-    if (updateUserInput.role) user.role_id = updateUserInput.role;
-    if (updateUserInput.permissions)
-      user.permissions = await this.permissionService.findMany(
-        updateUserInput.permissions,
-      );
+    if (updateUserInput.role)
+      user.role = await this.roleService.findOne(updateUserInput.role);
     return this.userRepository.save(user);
   }
 
@@ -67,13 +60,5 @@ export class UsersService {
       throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
     }
     return await this.userRepository.remove(user);
-  }
-
-  async getUserPermissions(userId: number) {
-    let user = await this.userRepository.findOne({
-      where: { id: userId },
-      relations: ['permissions'],
-    });
-    return user.permissions;
   }
 }

@@ -1,16 +1,22 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Permission } from '../permissions/entities/permission.entity';
 import { AppModule } from '../app.module';
 import { Role } from './entities/role.entity';
 import { RolesService } from './roles.service';
+import { PermissionsModule } from '../permissions/permissions.module';
 
 describe('RolesService', () => {
   let service: RolesService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [AppModule, TypeOrmModule.forFeature([Role])],
+      imports: [
+        AppModule,
+        TypeOrmModule.forFeature([Role, Permission]),
+        PermissionsModule,
+      ],
       providers: [RolesService],
     }).compile();
 
@@ -36,12 +42,12 @@ describe('RolesService', () => {
 
   it('should get all roles with the new one', async () => {
     let roles = await service.findAll();
-    expect(roles.length).toEqual(length + 1);    
+    expect(roles.length).toEqual(length + 1);
   });
 
   it('should get a single role', async () => {
-    let role = await service.findOne(newItem.id)
-    expect(role).toEqual(newItem)
+    let role = await service.findOne(newItem.id);
+    expect(role).toEqual(newItem);
   });
 
   it('should update the new role', async () => {
@@ -50,7 +56,7 @@ describe('RolesService', () => {
       name: 'justfortestedited',
     });
     newItem.name = 'justfortestedited';
-    expect(role).toEqual(newItem)
+    expect(role).toEqual(newItem);
   });
 
   it('should get the updated role', async () => {

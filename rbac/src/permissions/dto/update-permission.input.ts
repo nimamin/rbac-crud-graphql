@@ -7,5 +7,5 @@ export class UpdatePermissionInput extends PartialType(CreatePermissionInput) {
   id: number;
 
   @Field()
-  name: string;
+  name?: string;
 }
